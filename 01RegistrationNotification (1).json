@@ -1,0 +1,125 @@
+{
+  "name": "01RegistrationNotification",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "registration-notification11111",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        864,
+        272
+      ],
+      "id": "cce94396-9fd5-43ce-894e-596ef66787ef",
+      "name": "Webhook - Nhận Đăng Ký",
+      "webhookId": "registration-webhook-001"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "zalo-bot-token",
+              "name": "access_token",
+              "value": "3682309957303154161:toHJdCNZuRLAbgzFAthLBcGJROrUYGJGdRwfGNwipSjhMXQMAXFxzKIearPkfHEE",
+              "type": "string"
+            },
+            {
+              "id": "admin-chat-id",
+              "name": "admin_chat_id",
+              "value": "c083c42b2060c93e9071",
+              "type": "string"
+            },
+            {
+              "id": "format-message",
+              "name": "message",
+              "value": "=🎉 ĐĂNG KÝ MỚI - Khóa Facebook Ads\n\n👤 Họ và tên: {{ $json.body.name }}\n📧 Email: {{ $json.body.email }}\n📱 Số điện thoại: {{ $json.body.phone }}\n💰 Học phí: 1,450,000 VNĐ\n🔑 Mã thanh toán: {{ $json.body.payment_code }}\n⏰ Thời gian: {{ $json.body.date }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1088,
+        272
+      ],
+      "id": "c77446e6-6393-4875-9e3d-744356bf9737",
+      "name": "Chuẩn Bị Dữ Liệu"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://bot-api.zaloplatforms.com/bot{{ $json.access_token }}/sendMessage",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chat_id",
+              "value": "={{ $json.admin_chat_id }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.message }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1312,
+        272
+      ],
+      "id": "b42f8d18-7c2c-4a3a-99cc-e4c5794f0495",
+      "name": "Gửi Đến Zalo Bot"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - Nhận Đăng Ký": {
+      "main": [
+        [
+          {
+            "node": "Chuẩn Bị Dữ Liệu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chuẩn Bị Dữ Liệu": {
+      "main": [
+        [
+          {
+            "node": "Gửi Đến Zalo Bot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gửi Đến Zalo Bot": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "b63cea1f-e45c-4944-a8a3-6ce074ca20eb",
+  "meta": {
+    "instanceId": "9afe67c5c4700f465bf756215b5e5e959b7e37136df48464de5e08eb43e7b2cb"
+  },
+  "id": "kdzOhIFWlgpJAXkr",
+  "tags": []
+}
